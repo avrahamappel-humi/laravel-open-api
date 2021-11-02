@@ -148,12 +148,12 @@ class TagExtractor
         return PathHandler::handle($tags, $routeParameters);
     }
 
-    public function getGroup(string $candidate)
+    public function getGroup(string $candidate, string $module = '')
     {
         $methodGroups = GroupTag::getFrom($this->methodDocBlock);
         $controllerGroups = GroupTag::getFrom($this->controllerDocBlock);
 
-        return $methodGroups ?: $controllerGroups ?: [Guesser::groupName($candidate)];
+        return $methodGroups ?: $controllerGroups ?: [Guesser::groupName($candidate, $module)];
     }
 
     public function getOperationId(string $candidate, string $operation)
@@ -163,9 +163,9 @@ class TagExtractor
         return OperationIdHandler::handle($tags, $candidate, $this->method, $operation);
     }
 
-    public function getMethodData(string $candidate)
+    public function getMethodData(string $candidate, string $module = '')
     {
-        $groups = $this->getGroup($candidate);
+        $groups = $this->getGroup($candidate, $module);
 
         return [
             'summary'     => $this->methodDocBlock->getShortDescription(),

@@ -15,6 +15,11 @@ return [
     'model_namespace'          => 'App\\Models\\',
 
     /**
+     * Modules namespace (if using modules)
+     */
+    'modules_namespace'        => 'App\\Modules\\',
+
+    /**
      * General OpenApi properties to generate.
      */
     'general'                  => [

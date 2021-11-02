@@ -60,12 +60,6 @@ class SchemaGenerator
 
         foreach ($this->routerRoutes as $routerRoute) {
 
-            // Testing purposes only
-//            $routeName = $routerRoute->getName();
-//            if (!$routeName || !(preg_match('/custom-field\.remote\.store/', $routeName))) {
-//                continue;
-//            }
-
             $route = new RouteWrapper($routerRoute);
 
             if ($route->shouldSkip()) {
@@ -99,12 +93,13 @@ class SchemaGenerator
         $controller = $route->controllerName();
         $method = $route->controllerMethod();
 
+        $module = Guesser::module($controller);
         $namespace = Guesser::modelNamespace($controller);
         $candidate = Guesser::modelName($controller);
 
         $tagExtractor = new TagExtractor($controller, $method);
         $model = $tagExtractor->getModel($namespace, $candidate);
-        $methodData = $tagExtractor->getMethodData($candidate);
+        $methodData = $tagExtractor->getMethodData($candidate, $module);
         $pathParameters = $tagExtractor->getPathParameters($route->getPathParameters());
 
         $schemaName = $this->schemaName($namespace, $controller, $method, $candidate, $model);
