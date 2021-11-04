@@ -6,7 +6,8 @@ use Asseco\OpenApi\SchemaGenerator;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Yaml\Yaml;
-use Tests\Stubs\ModelController;
+use Tests\Stubs\Http\Controllers\ModelController;
+use Tests\Stubs\Http\Controllers\StandardController;
 
 class OpenApiTest extends TestCase
 {
@@ -15,7 +16,7 @@ class OpenApiTest extends TestCase
      */
     public function it_generates_a_valid_openapi_schema_based_on_a_standard_controller()
     {
-        Route::apiResource('model', ModelController::class);
+        Route::get('standard', StandardController::class . '@standard');
 
         $expected = Yaml::parse(file_get_contents(__DIR__ . '/fixtures/standard-controller.yml'));
         $schema = $this->generateSchema();
@@ -23,7 +24,20 @@ class OpenApiTest extends TestCase
         self::assertSame($expected, $schema);
     }
 
-    // it generates a valid openapi schema based on a module controller
+    /** @test */
+    public function it_generates_a_valid_openapi_schema_with_response_data_based_on_the_model_fields()
+    {
+        Route::apiResource('model', ModelController::class);
+
+        $expected = Yaml::parse(file_get_contents(__DIR__ . '/fixtures/model-controller.yml'));
+        $schema = $this->generateSchema();
+
+        self::assertSame($expected, $schema);
+    }
+
+    // it generates a valid openapi schema with response data based on the associated resource fields
+    // it generates a valid openapi schema with request data for read requests based on the associated filters
+    // it generates a valid openapi schema with request data for write requests based on the associated validators
 
     private function generateSchema(): array
     {

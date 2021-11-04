@@ -6,142 +6,16 @@ info:
 servers:
     - { url: 'http://localhost', description: 'Default server' }
 paths:
-    '/model/{model}':
-        {
-            delete:
-                {
-                    summary: '',
-                    description: '',
-                    tags: [Models],
-                    operationId: LaravelDeleteModel,
-                    parameters:
-                        [
-                            {
-                                in: path,
-                                name: model,
-                                schema: { type: integer },
-                                required: true,
-                                description: 'Path parameter',
-                            },
-                        ],
-                    responses: { 200: { description: 'Successful response.' } },
-                },
-            get:
-                {
-                    summary: '',
-                    description: '',
-                    tags: [Models],
-                    operationId: LaravelGetModel,
-                    parameters:
-                        [
-                            {
-                                in: path,
-                                name: model,
-                                schema: { type: integer },
-                                required: true,
-                                description: 'Path parameter',
-                            },
-                        ],
-                    responses: { 200: { description: 'Successful response.' } },
-                },
-            put:
-                {
-                    summary: '',
-                    description: '',
-                    tags: [Models],
-                    operationId: LaravelPutModel,
-                    parameters:
-                        [
-                            {
-                                in: path,
-                                name: model,
-                                schema: { type: integer },
-                                required: true,
-                                description: 'Path parameter',
-                            },
-                        ],
-                    requestBody:
-                        {
-                            content:
-                                {
-                                    application/json:
-                                        {
-                                            schema:
-                                                {
-                                                    $ref: '#/components/schemas/Laravel_Request_update_AppModulesModels_TestsStubsModelController_Model',
-                                                },
-                                        },
-                                },
-                        },
-                    responses: { 200: { description: 'Successful response.' } },
-                },
-            patch:
-                {
-                    summary: '',
-                    description: '',
-                    tags: [Models],
-                    operationId: LaravelPatchModel,
-                    parameters:
-                        [
-                            {
-                                in: path,
-                                name: model,
-                                schema: { type: integer },
-                                required: true,
-                                description: 'Path parameter',
-                            },
-                        ],
-                    requestBody:
-                        {
-                            content:
-                                {
-                                    application/json:
-                                        {
-                                            schema:
-                                                {
-                                                    $ref: '#/components/schemas/Laravel_Request_update_AppModulesModels_TestsStubsModelController_Model',
-                                                },
-                                        },
-                                },
-                        },
-                    responses: { 200: { description: 'Successful response.' } },
-                },
-        }
-    /model:
+    /standard:
         {
             get:
                 {
                     summary: '',
                     description: '',
-                    tags: [Models],
-                    operationId: LaravelGetAllModels,
-                    responses: { 200: { description: 'Successful response.' } },
-                },
-            post:
-                {
-                    summary: '',
-                    description: '',
-                    tags: [Models],
-                    operationId: LaravelCreateModel,
-                    requestBody:
-                        {
-                            content:
-                                {
-                                    application/json:
-                                        {
-                                            schema:
-                                                {
-                                                    $ref: '#/components/schemas/Laravel_Request_store_AppModulesModels_TestsStubsModelController_Model',
-                                                },
-                                        },
-                                },
-                        },
+                    tags: [Standards],
+                    operationId: LaravelStandardStandard,
                     responses: { 200: { description: 'Successful response.' } },
                 },
         }
 components:
-    schemas:
-        {
-            Laravel_Request_store_AppModulesModels_TestsStubsModelController_Model: { type: object },
-            Laravel_Request_update_AppModulesModels_TestsStubsModelController_Model: { type: object },
-        }
+    schemas: {}

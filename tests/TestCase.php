@@ -5,7 +5,7 @@ namespace Tests;
 use Asseco\OpenApi\OpenApiServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
-class TestCase extends BaseTestCase
+abstract class TestCase extends BaseTestCase
 {
     /**
      * Get package providers.
