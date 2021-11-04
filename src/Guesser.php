@@ -8,30 +8,21 @@ use Illuminate\Support\Str;
 
 class Guesser
 {
-    public static function module(string $controller): string
+    public static function module(string $namespace): string
     {
         $modulesNamespace = config('asseco-open-api.modules_namespace');
 
-        if (!$modulesNamespace || !Str::contains($controller, $modulesNamespace)) {
+        if (!$modulesNamespace || !Str::contains($namespace, $modulesNamespace)) {
             return '';
         }
-
-        $moduleNamespace = Str::contains($controller, 'Http')
-            ? Str::before($controller, '\\Http')
-            : Str::before($controller, '\\Controllers');
-
-        return Str::after($moduleNamespace, $modulesNamespace);
+        return Str::after($namespace, $modulesNamespace);
     }
 
-    public static function modelNamespace(string $controller): string
+    public static function namespace(string $controller): string
     {
-        $moduleNamespace = config('asseco-open-api.modules_namespace');
-
-        if (empty($moduleNamespace)) {
-            return config('asseco-open-api.model_namespace');
-        }
-
-        return $moduleNamespace . 'Models\\';
+        return Str::contains($controller, 'Http')
+            ? Str::before($controller, '\\Http')
+            : Str::before($controller, '\\Controllers');
     }
 
     public static function modelName(string $controller): string
