@@ -11,6 +11,7 @@ use Asseco\OpenApi\Specification\Shared\ReferencedSchema;
 use Asseco\OpenApi\Specification\Shared\StandardSchema;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
+use stdClass;
 
 class ResponseGenerator
 {
@@ -118,6 +119,11 @@ class ResponseGenerator
 
     protected function extractResponseData(Model $model, array $columns, array $append = []): array
     {
+        // If model has associated resource, pass it through the resource
+        if ($this->modelHasResource($model)) {
+            return $this->getColumnsFromResource($model, $columns);
+        }
+
         $hidden = $model->getHidden();
 
         foreach ($columns as $column => $type) {
@@ -131,6 +137,44 @@ class ResponseGenerator
         }
 
         return $columns;
+    }
+
+    protected function modelHasResource(Model $model): bool
+    {
+        return property_exists($model, 'resource');
+    }
+
+    protected function getColumnsFromResource(Model $model, array $columns): array
+    {
+        $resourceGetter = fn() => $this->resource;
+        $resourceClass = $resourceGetter->call($model);
+
+        // Map columns by name and pass into resource class.
+        $columns = collect($columns)->reduce(function (stdClass $object, Column $column) {
+            $object->{$column->name} = $column;
+            return $object;
+        }, new \stdClass());
+
+        $resource = (new $resourceClass($columns))->toArray(null);
+
+        return $this->mapResourceToColumns($resource);
+    }
+
+    protected function mapResourceToColumns(array $resource): array
+    {
+        return collect($resource)
+            ->map(function ($item, $key) {
+                if ($item instanceof Column) {
+                    return $item;
+                }
+
+                if (!is_array($item)) {
+                    return new Column($key, gettype($item), true);
+                }
+
+                return $this->mapResourceToColumns($item);
+            })
+            ->all();
     }
 
     public function isMultiple(string $routeOperation, bool $routeHasPathParameters): bool
