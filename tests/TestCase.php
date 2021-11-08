@@ -18,4 +18,14 @@ abstract class TestCase extends BaseTestCase
     {
         return [OpenApiServiceProvider::class];
     }
+
+    /**
+     * Define database migrations.
+     *
+     * @return void
+     */
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadMigrationsFrom(__DIR__ . '/migrations');
+    }
 }

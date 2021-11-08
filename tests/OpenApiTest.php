@@ -3,14 +3,17 @@
 namespace Tests;
 
 use Asseco\OpenApi\SchemaGenerator;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Console\OutputStyle;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Route;
 use Symfony\Component\Yaml\Yaml;
 use Tests\Stubs\Http\Controllers\ModelController;
 use Tests\Stubs\Http\Controllers\StandardController;
 
 class OpenApiTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * @test
      */
@@ -24,7 +27,9 @@ class OpenApiTest extends TestCase
         self::assertSame($expected, $schema);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_generates_a_valid_openapi_schema_with_response_data_based_on_the_model_fields()
     {
         Route::apiResource('model', ModelController::class);

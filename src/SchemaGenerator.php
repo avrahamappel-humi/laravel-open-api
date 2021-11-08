@@ -11,19 +11,18 @@ use Asseco\OpenApi\Specification\Paths\Paths;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use ReflectionException;
 
 class SchemaGenerator
 {
-    protected Collection $routerRoutes;
+    protected Router $router;
     public Document $document;
 
     public function __construct(Router $router, Document $document)
     {
+        $this->router = $router;
         $this->document = $document;
-        $this->routerRoutes = collect($router->getRoutes())->sortBy('action.controller');
     }
 
     /**
@@ -52,14 +51,15 @@ class SchemaGenerator
      */
     protected function traverseRoutes(OutputStyle $output): array
     {
+        $routerRoutes = collect($this->router->getRoutes())->sortBy('action.controller');
+
         $paths = new Paths();
         $components = new Components();
 
-        $bar = $output->createProgressBar(count($this->routerRoutes));
+        $bar = $output->createProgressBar(count($routerRoutes));
         $bar->start();
 
-        foreach ($this->routerRoutes as $routerRoute) {
-
+        foreach ($routerRoutes as $routerRoute) {
             $route = new RouteWrapper($routerRoute);
 
             if ($route->shouldSkip()) {
