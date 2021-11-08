@@ -24,7 +24,23 @@ paths:
                                 description: 'Path parameter',
                             },
                         ],
-                    responses: { 200: { description: 'Successful response.' } },
+                    responses:
+                        {
+                            200:
+                                {
+                                    description: 'Successful response.',
+                                    content:
+                                        {
+                                            application/json:
+                                                {
+                                                    schema:
+                                                        {
+                                                            $ref: '#/components/schemas/Laravel_Response_destroy_TestsStubs_ModelController_ModelsModel',
+                                                        },
+                                                },
+                                        },
+                                },
+                        },
                 },
             get:
                 {
@@ -42,7 +58,23 @@ paths:
                                 description: 'Path parameter',
                             },
                         ],
-                    responses: { 200: { description: 'Successful response.' } },
+                    responses:
+                        {
+                            200:
+                                {
+                                    description: 'Successful response.',
+                                    content:
+                                        {
+                                            application/json:
+                                                {
+                                                    schema:
+                                                        {
+                                                            $ref: '#/components/schemas/Laravel_Response_show_TestsStubs_ModelController_ModelsModel',
+                                                        },
+                                                },
+                                        },
+                                },
+                        },
                 },
             put:
                 {
@@ -68,12 +100,28 @@ paths:
                                         {
                                             schema:
                                                 {
-                                                    $ref: '#/components/schemas/Laravel_Request_update_TestsStubs_ModelController_Model',
+                                                    $ref: '#/components/schemas/Laravel_Request_update_TestsStubs_ModelController_ModelsModel',
                                                 },
                                         },
                                 },
                         },
-                    responses: { 200: { description: 'Successful response.' } },
+                    responses:
+                        {
+                            200:
+                                {
+                                    description: 'Successful response.',
+                                    content:
+                                        {
+                                            application/json:
+                                                {
+                                                    schema:
+                                                        {
+                                                            $ref: '#/components/schemas/Laravel_Response_update_TestsStubs_ModelController_ModelsModel',
+                                                        },
+                                                },
+                                        },
+                                },
+                        },
                 },
             patch:
                 {
@@ -99,12 +147,28 @@ paths:
                                         {
                                             schema:
                                                 {
-                                                    $ref: '#/components/schemas/Laravel_Request_update_TestsStubs_ModelController_Model',
+                                                    $ref: '#/components/schemas/Laravel_Request_update_TestsStubs_ModelController_ModelsModel',
                                                 },
                                         },
                                 },
                         },
-                    responses: { 200: { description: 'Successful response.' } },
+                    responses:
+                        {
+                            200:
+                                {
+                                    description: 'Successful response.',
+                                    content:
+                                        {
+                                            application/json:
+                                                {
+                                                    schema:
+                                                        {
+                                                            $ref: '#/components/schemas/Laravel_Response_update_TestsStubs_ModelController_ModelsModel',
+                                                        },
+                                                },
+                                        },
+                                },
+                        },
                 },
         }
     /model:
@@ -115,7 +179,27 @@ paths:
                     description: '',
                     tags: [Models],
                     operationId: LaravelGetAllModels,
-                    responses: { 200: { description: 'Successful response.' } },
+                    responses:
+                        {
+                            200:
+                                {
+                                    description: 'Successful response.',
+                                    content:
+                                        {
+                                            application/json:
+                                                {
+                                                    schema:
+                                                        {
+                                                            type: array,
+                                                            items:
+                                                                {
+                                                                    $ref: '#/components/schemas/Laravel_Response_index_TestsStubs_ModelController_ModelsModel',
+                                                                },
+                                                        },
+                                                },
+                                        },
+                                },
+                        },
                 },
             post:
                 {
@@ -131,17 +215,108 @@ paths:
                                         {
                                             schema:
                                                 {
-                                                    $ref: '#/components/schemas/Laravel_Request_store_TestsStubs_ModelController_Model',
+                                                    $ref: '#/components/schemas/Laravel_Request_store_TestsStubs_ModelController_ModelsModel',
                                                 },
                                         },
                                 },
                         },
-                    responses: { 200: { description: 'Successful response.' } },
+                    responses:
+                        {
+                            200:
+                                {
+                                    description: 'Successful response.',
+                                    content:
+                                        {
+                                            application/json:
+                                                {
+                                                    schema:
+                                                        {
+                                                            $ref: '#/components/schemas/Laravel_Response_store_TestsStubs_ModelController_ModelsModel',
+                                                        },
+                                                },
+                                        },
+                                },
+                        },
                 },
         }
 components:
     schemas:
         {
-            Laravel_Request_store_TestsStubs_ModelController_Model: { type: object },
-            Laravel_Request_update_TestsStubs_ModelController_Model: { type: object },
+            Laravel_Response_destroy_TestsStubs_ModelController_ModelsModel:
+                {
+                    type: object,
+                    properties:
+                        {
+                            id: { type: integer, description: '' },
+                            created_at: { type: string, description: '' },
+                            updated_at: { type: string, description: '' },
+                        },
+                    required: [id],
+                },
+            Laravel_Response_index_TestsStubs_ModelController_ModelsModel:
+                {
+                    type: object,
+                    properties:
+                        {
+                            id: { type: integer, description: '' },
+                            created_at: { type: string, description: '' },
+                            updated_at: { type: string, description: '' },
+                        },
+                    required: [id],
+                },
+            Laravel_Response_show_TestsStubs_ModelController_ModelsModel:
+                {
+                    type: object,
+                    properties:
+                        {
+                            id: { type: integer, description: '' },
+                            created_at: { type: string, description: '' },
+                            updated_at: { type: string, description: '' },
+                        },
+                    required: [id],
+                },
+            Laravel_Request_store_TestsStubs_ModelController_ModelsModel:
+                {
+                    type: object,
+                    properties:
+                        {
+                            id: { type: integer, description: '' },
+                            created_at: { type: string, description: '' },
+                            updated_at: { type: string, description: '' },
+                        },
+                    required: [id],
+                },
+            Laravel_Response_store_TestsStubs_ModelController_ModelsModel:
+                {
+                    type: object,
+                    properties:
+                        {
+                            id: { type: integer, description: '' },
+                            created_at: { type: string, description: '' },
+                            updated_at: { type: string, description: '' },
+                        },
+                    required: [id],
+                },
+            Laravel_Request_update_TestsStubs_ModelController_ModelsModel:
+                {
+                    type: object,
+                    properties:
+                        {
+                            id: { type: integer, description: '' },
+                            created_at: { type: string, description: '' },
+                            updated_at: { type: string, description: '' },
+                        },
+                    required: [id],
+                },
+            Laravel_Response_update_TestsStubs_ModelController_ModelsModel:
+                {
+                    type: object,
+                    properties:
+                        {
+                            id: { type: integer, description: '' },
+                            created_at: { type: string, description: '' },
+                            updated_at: { type: string, description: '' },
+                        },
+                    required: [id],
+                },
         }
