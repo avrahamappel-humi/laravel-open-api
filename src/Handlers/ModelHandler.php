@@ -11,19 +11,19 @@ class ModelHandler extends AbstractHandler
         $model = self::getModelFromDocBlock($tags, $namespace);
 
         if (class_exists($model)) {
-            return new $model;
+            return new $model();
         }
 
         $mapping = config('asseco-open-api.controller_model_mapping');
 
         if (array_key_exists($controller, $mapping)) {
-            return new $mapping[$controller];
+            return new $mapping[$controller]();
         }
 
-        if (class_exists($namespace . $candidate)) {
-            $class = $namespace . $candidate;
+        if (class_exists(static::namespacedModelName($namespace, $candidate))) {
+            $class = static::namespacedModelName($namespace, $candidate);
 
-            return new $class;
+            return new $class();
         }
 
         return null;
@@ -38,9 +38,14 @@ class ModelHandler extends AbstractHandler
         $model = $tags[0];
 
         if (!self::modelNamespaced($model)) {
-            return $namespace . $model;
+            return static::namespacedModelName($namespace, $model);
         }
 
         return $model;
+    }
+
+    protected static function namespacedModelName(string $namespace, string $model): string
+    {
+        return $namespace . '\\Models\\' . $model;
     }
 }

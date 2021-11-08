@@ -11,19 +11,18 @@ use Asseco\OpenApi\Specification\Paths\Paths;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use ReflectionException;
 
 class SchemaGenerator
 {
-    protected Collection $routerRoutes;
+    protected Router $router;
     public Document $document;
 
     public function __construct(Router $router, Document $document)
     {
+        $this->router = $router;
         $this->document = $document;
-        $this->routerRoutes = collect($router->getRoutes())->sortBy('action.controller');
     }
 
     /**
@@ -52,14 +51,15 @@ class SchemaGenerator
      */
     protected function traverseRoutes(OutputStyle $output): array
     {
+        $routerRoutes = collect($this->router->getRoutes())->sortBy('action.controller');
+
         $paths = new Paths();
         $components = new Components();
 
-        $bar = $output->createProgressBar(count($this->routerRoutes));
+        $bar = $output->createProgressBar(count($routerRoutes));
         $bar->start();
 
-        foreach ($this->routerRoutes as $routerRoute) {
-
+        foreach ($routerRoutes as $routerRoute) {
             $route = new RouteWrapper($routerRoute);
 
             if ($route->shouldSkip()) {
@@ -93,8 +93,8 @@ class SchemaGenerator
         $controller = $route->controllerName();
         $method = $route->controllerMethod();
 
-        $module = Guesser::module($controller);
-        $namespace = Guesser::modelNamespace($controller);
+        $namespace = Guesser::namespace($controller);
+        $module = Guesser::module($namespace);
         $candidate = Guesser::modelName($controller);
 
         $tagExtractor = new TagExtractor($controller, $method);
@@ -104,10 +104,16 @@ class SchemaGenerator
 
         $schemaName = $this->schemaName($namespace, $controller, $method, $candidate, $model);
 
-        [$path, $requestSchemas, $responseSchemas] =
-            $this->traverseOperations($route, $methodData,
-                $tagExtractor, $schemaName, $model,
-                $pathParameters, $candidate, $namespace);
+        [$path, $requestSchemas, $responseSchemas] = $this->traverseOperations(
+            $route,
+            $methodData,
+            $tagExtractor,
+            $schemaName,
+            $model,
+            $pathParameters,
+            $candidate,
+            $namespace
+        );
 
         return [$path, $requestSchemas, $responseSchemas];
     }
@@ -125,8 +131,16 @@ class SchemaGenerator
      *
      * @throws Exceptions\OpenApiException
      */
-    protected function traverseOperations(RouteWrapper $route, $methodData, $tagExtractor, $schemaName, $model, $pathParameters, $candidate, string $namespace): array
-    {
+    protected function traverseOperations(
+        RouteWrapper $route,
+        $methodData,
+        $tagExtractor,
+        $schemaName,
+        $model,
+        $pathParameters,
+        $candidate,
+        string $namespace
+    ): array {
         $appName = Str::studly(config('app.name'));
         $path = new Path($route->path());
         $requestSchemas = new Schemas();
@@ -138,8 +152,15 @@ class SchemaGenerator
             ]);
             $operation = new Operation($methodData, $routeOperation);
 
-            [$responseSchema, $responses] =
-                $this->generateResponses($tagExtractor, $schemaName, $routeOperation, $route->hasPathParameters(), $model, $namespace, $appName);
+            [$responseSchema, $responses] = $this->generateResponses(
+                $tagExtractor,
+                $schemaName,
+                $routeOperation,
+                $route->hasPathParameters(),
+                $model,
+                $namespace,
+                $appName
+            );
 
             $requestGenerator = new RequestGenerator($tagExtractor, $appName . '_Request_' . $schemaName);
             $requestSchema = $requestGenerator->createSchema($namespace, $model);
@@ -162,8 +183,13 @@ class SchemaGenerator
         return [$path, $requestSchemas, $responseSchemas];
     }
 
-    public function schemaName(string $namespace, string $controller, string $method, string $candidate, ?Model $model): string
-    {
+    public function schemaName(
+        string $namespace,
+        string $controller,
+        string $method,
+        string $candidate,
+        ?Model $model
+    ): string {
         $joinedNamespace = $this->removeSlashes($namespace);
         $joinedController = $this->removeSlashes($controller);
 
@@ -187,8 +213,15 @@ class SchemaGenerator
         return str_replace(['\\', ' '], '', $input);
     }
 
-    protected function generateResponses(TagExtractor $extractor, string $schemaName, string $routeOperation, bool $routeHasPathParameters, ?Model $model, string $namespace, string $appName): array
-    {
+    protected function generateResponses(
+        TagExtractor $extractor,
+        string $schemaName,
+        string $routeOperation,
+        bool $routeHasPathParameters,
+        ?Model $model,
+        string $namespace,
+        string $appName
+    ): array {
         $responseGenerator = new ResponseGenerator($extractor, $appName . '_Response_' . $schemaName);
 
         $responseSchema = $responseGenerator->createSchema($namespace, $model);
