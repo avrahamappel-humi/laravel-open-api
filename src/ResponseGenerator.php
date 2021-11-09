@@ -120,8 +120,8 @@ class ResponseGenerator
     protected function extractResponseData(Model $model, array $columns, array $append = []): array
     {
         // If model has associated resource, pass it through the resource
-        if ($this->modelHasResource($model)) {
-            return $this->getColumnsFromResource($model, $columns);
+        if ($resource = $this->getModelResource($model)) {
+            return $this->getColumnsFromResource($resource, $columns);
         }
 
         $hidden = $model->getHidden();
@@ -139,25 +139,28 @@ class ResponseGenerator
         return $columns;
     }
 
-    protected function modelHasResource(Model $model): bool
+    protected function getModelResource(Model $model): ?string
     {
-        return property_exists($model, 'resource');
+        if (!property_exists($model, 'resource')) {
+            return null;
+        }
+
+        $resourceGetter = fn() => $this->resource;
+
+        return $resourceGetter->call($model);
     }
 
-    protected function getColumnsFromResource(Model $model, array $columns): array
+    protected function getColumnsFromResource(string $resourceClass, array $columns)
     {
-        $resourceGetter = fn() => $this->resource;
-        $resourceClass = $resourceGetter->call($model);
-
         // Map columns by name and pass into resource class.
         $columns = collect($columns)->reduce(function (stdClass $object, Column $column) {
             $object->{$column->name} = $column;
             return $object;
         }, new \stdClass());
 
-        $resource = (new $resourceClass($columns))->toArray(null);
+        $resource = new $resourceClass($columns);
 
-        return $this->mapResourceToColumns($resource);
+        return $this->mapResourceToColumns($resource->toArray(null));
     }
 
     protected function mapResourceToColumns(array $resource): array
@@ -172,7 +175,10 @@ class ResponseGenerator
                     return new Column($key, gettype($item), true);
                 }
 
-                return $this->mapResourceToColumns($item);
+                $column = new Column($key, 'object', true);
+                $column->children = $this->mapResourceToColumns($item);
+
+                return $column;
             })
             ->all();
     }

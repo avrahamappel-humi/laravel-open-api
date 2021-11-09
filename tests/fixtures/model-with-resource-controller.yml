@@ -247,33 +247,84 @@ components:
                     type: object,
                     properties:
                         {
-                            id: { type: integer, description: '' },
-                            created_at: { type: string, description: '' },
-                            updated_at: { type: string, description: '' },
+                            data:
+                                {
+                                    type: object,
+                                    description: '',
+                                    properties:
+                                        {
+                                            id: { type: integer },
+                                            type: { type: string },
+                                            attributes:
+                                                {
+                                                    type: object,
+                                                    properties:
+                                                        {
+                                                            id: { type: integer, description: '' },
+                                                            created_at: { type: string, description: '' },
+                                                            updated_at: { type: string, description: '' },
+                                                        },
+                                                },
+                                        },
+                                },
                         },
-                    required: [id],
+                    required: [data],
                 },
             Laravel_Response_index_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
                 {
                     type: object,
                     properties:
                         {
-                            id: { type: integer, description: '' },
-                            created_at: { type: string, description: '' },
-                            updated_at: { type: string, description: '' },
+                            data:
+                                {
+                                    type: object,
+                                    description: '',
+                                    properties:
+                                        {
+                                            id: { type: integer },
+                                            type: { type: string },
+                                            attributes:
+                                                {
+                                                    type: object,
+                                                    properties:
+                                                        {
+                                                            id: { type: integer, description: '' },
+                                                            created_at: { type: string, description: '' },
+                                                            updated_at: { type: string, description: '' },
+                                                        },
+                                                },
+                                        },
+                                },
                         },
-                    required: [id],
+                    required: [data],
                 },
             Laravel_Response_show_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
                 {
                     type: object,
                     properties:
                         {
-                            id: { type: integer, description: '' },
-                            created_at: { type: string, description: '' },
-                            updated_at: { type: string, description: '' },
+                            data:
+                                {
+                                    type: object,
+                                    description: '',
+                                    properties:
+                                        {
+                                            id: { type: integer },
+                                            type: { type: string },
+                                            attributes:
+                                                {
+                                                    type: object,
+                                                    properties:
+                                                        {
+                                                            id: { type: integer, description: '' },
+                                                            created_at: { type: string, description: '' },
+                                                            updated_at: { type: string, description: '' },
+                                                        },
+                                                },
+                                        },
+                                },
                         },
-                    required: [id],
+                    required: [data],
                 },
             Laravel_Request_store_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
                 {
@@ -291,11 +342,28 @@ components:
                     type: object,
                     properties:
                         {
-                            id: { type: integer, description: '' },
-                            created_at: { type: string, description: '' },
-                            updated_at: { type: string, description: '' },
+                            data:
+                                {
+                                    type: object,
+                                    description: '',
+                                    properties:
+                                        {
+                                            id: { type: integer },
+                                            type: { type: string },
+                                            attributes:
+                                                {
+                                                    type: object,
+                                                    properties:
+                                                        {
+                                                            id: { type: integer, description: '' },
+                                                            created_at: { type: string, description: '' },
+                                                            updated_at: { type: string, description: '' },
+                                                        },
+                                                },
+                                        },
+                                },
                         },
-                    required: [id],
+                    required: [data],
                 },
             Laravel_Request_update_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
                 {
@@ -313,10 +381,27 @@ components:
                     type: object,
                     properties:
                         {
-                            id: { type: integer, description: '' },
-                            created_at: { type: string, description: '' },
-                            updated_at: { type: string, description: '' },
+                            data:
+                                {
+                                    type: object,
+                                    description: '',
+                                    properties:
+                                        {
+                                            id: { type: integer },
+                                            type: { type: string },
+                                            attributes:
+                                                {
+                                                    type: object,
+                                                    properties:
+                                                        {
+                                                            id: { type: integer, description: '' },
+                                                            created_at: { type: string, description: '' },
+                                                            updated_at: { type: string, description: '' },
+                                                        },
+                                                },
+                                        },
+                                },
                         },
-                    required: [id],
+                    required: [data],
                 },
         }
