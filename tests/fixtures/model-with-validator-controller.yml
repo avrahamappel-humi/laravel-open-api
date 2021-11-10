@@ -122,10 +122,20 @@ components:
                     properties:
                         id:
                             type: integer
+                            description: ''
                         type:
                             type: string
+                            description: ''
                         attributes:
                             type: object
+                            description: ''
+                            properties:
+                                foo:
+                                    type: string
+                                    description: ''
+                                bar:
+                                    type: string
+                                    description: ''
             required:
                 - data
         Laravel_Request_update_TestsStubs_ModelWithValidatorController_ModelsModelWithValidator:
@@ -137,9 +147,19 @@ components:
                     properties:
                         id:
                             type: integer
+                            description: ''
                         type:
                             type: string
+                            description: ''
                         attributes:
                             type: object
+                            description: ''
+                            properties:
+                                foo:
+                                    type: string
+                                    description: ''
+                                bar:
+                                    type: string
+                                    description: ''
             required:
                 - data

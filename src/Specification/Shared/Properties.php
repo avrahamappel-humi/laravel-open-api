@@ -27,7 +27,7 @@ class Properties implements Serializable
 
         return [
             'properties' => $properties,
-            'required'   => $required,
+            'required' => $required,
         ];
     }
 
@@ -39,7 +39,7 @@ class Properties implements Serializable
         foreach ($this->modelColumns as $column) {
             if (is_string($column)) {
                 $columnValues = [
-                    'type'    => 'string',
+                    'type' => 'string',
                     'example' => $column,
                 ];
                 $properties = array_merge_recursive($properties, $columnValues);
@@ -47,36 +47,8 @@ class Properties implements Serializable
             }
 
             $columnValues = [
-                $column->name => [
-                    'type'        => $column->type,
-                    'description' => $column->description,
-                    //'format' => 'map something',
-                ],
+                $column->name => $this->getColumnValue($column),
             ];
-
-            if ($column->children) {
-                foreach ($column->children as $child) {
-                    if ($column->type === 'object') {
-                        $columnValues[$column->name] = array_merge_recursive($columnValues[$column->name],
-                            [
-                                'properties' => [
-                                    $child->name => [
-                                        'type' => $child->type,
-                                    ],
-                                ],
-                            ]);
-
-                        continue;
-                    }
-
-                    $columnValues[$column->name] = array_merge_recursive($columnValues[$column->name],
-                        [
-                            'items' => [
-                                'type' => $child->type,
-                            ],
-                        ]);
-                }
-            }
 
             $properties = array_merge_recursive($properties, $columnValues);
 
@@ -86,5 +58,34 @@ class Properties implements Serializable
         }
 
         return [$properties, $required];
+    }
+
+    private function getColumnValue(Column $column): array
+    {
+        $columnValue = [
+            'type' => $column->type,
+            'description' => $column->description,
+            //'format' => 'map something',
+        ];
+
+        if ($column->children) {
+            foreach ($column->children as $child) {
+                if ($column->type === 'object') {
+                    $columnValue = array_merge_recursive($columnValue, [
+                        'properties' => [
+                            $child->name => $this->getColumnValue($child),
+                        ],
+                    ]);
+
+                    continue;
+                }
+
+                $columnValue = array_merge_recursive($columnValue, [
+                    'items' => $this->getColumnValue($child),
+                ]);
+            }
+        }
+
+        return $columnValue;
     }
 }
