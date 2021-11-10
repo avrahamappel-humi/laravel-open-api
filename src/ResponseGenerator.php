@@ -11,6 +11,7 @@ use Asseco\OpenApi\Specification\Shared\ReferencedSchema;
 use Asseco\OpenApi\Specification\Shared\StandardSchema;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
+use stdClass;
 
 class ResponseGenerator
 {
@@ -118,6 +119,11 @@ class ResponseGenerator
 
     protected function extractResponseData(Model $model, array $columns, array $append = []): array
     {
+        // If model has associated resource, pass it through the resource
+        if ($resource = $this->getModelResource($model)) {
+            return $this->getColumnsFromResource($resource, $columns);
+        }
+
         $hidden = $model->getHidden();
 
         foreach ($columns as $column => $type) {
@@ -131,6 +137,50 @@ class ResponseGenerator
         }
 
         return $columns;
+    }
+
+    protected function getModelResource(Model $model): ?string
+    {
+        if (!property_exists($model, 'resource')) {
+            return null;
+        }
+
+        $resourceGetter = fn() => $this->resource;
+
+        return $resourceGetter->call($model);
+    }
+
+    protected function getColumnsFromResource(string $resourceClass, array $columns)
+    {
+        // Map columns by name and pass into resource class.
+        $columns = collect($columns)->reduce(function (stdClass $object, Column $column) {
+            $object->{$column->name} = $column;
+            return $object;
+        }, new \stdClass());
+
+        $resource = new $resourceClass($columns);
+
+        return $this->mapResourceToColumns($resource->toArray(null));
+    }
+
+    protected function mapResourceToColumns(array $resource): array
+    {
+        return collect($resource)
+            ->map(function ($item, $key) {
+                if ($item instanceof Column) {
+                    return $item;
+                }
+
+                if (!is_array($item)) {
+                    return new Column($key, gettype($item), true);
+                }
+
+                $column = new Column($key, 'object', true);
+                $column->children = $this->mapResourceToColumns($item);
+
+                return $column;
+            })
+            ->all();
     }
 
     public function isMultiple(string $routeOperation, bool $routeHasPathParameters): bool

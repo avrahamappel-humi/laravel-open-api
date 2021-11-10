@@ -1,0 +1,244 @@
+openapi: 3.0.0
+info:
+    title: 'Laravel API'
+    description: 'Generated with this [awesome package](https://github.com/asseco-voice/laravel-open-api)!'
+    version: 0.0.1
+servers:
+    -
+        url: 'http://localhost'
+        description: 'Default server'
+paths:
+    '/model/{model}':
+        delete:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Resources'
+            operationId: LaravelDeleteModelWithResource
+            parameters:
+                -
+                    in: path
+                    name: model
+                    schema:
+                        type: integer
+                    required: true
+                    description: 'Path parameter'
+            responses:
+                200:
+                    description: 'Successful response.'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Laravel_Response_destroy_TestsStubs_ModelWithResourceController_ModelsModelWithResource'
+        get:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Resources'
+            operationId: LaravelGetModelWithResource
+            parameters:
+                -
+                    in: path
+                    name: model
+                    schema:
+                        type: integer
+                    required: true
+                    description: 'Path parameter'
+            responses:
+                200:
+                    description: 'Successful response.'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Laravel_Response_show_TestsStubs_ModelWithResourceController_ModelsModelWithResource'
+        put:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Resources'
+            operationId: LaravelPutModelWithResource
+            parameters:
+                -
+                    in: path
+                    name: model
+                    schema:
+                        type: integer
+                    required: true
+                    description: 'Path parameter'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Laravel_Request_update_TestsStubs_ModelWithResourceController_ModelsModelWithResource'
+            responses:
+                200:
+                    description: 'Successful response.'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Laravel_Response_update_TestsStubs_ModelWithResourceController_ModelsModelWithResource'
+        patch:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Resources'
+            operationId: LaravelPatchModelWithResource
+            parameters:
+                -
+                    in: path
+                    name: model
+                    schema:
+                        type: integer
+                    required: true
+                    description: 'Path parameter'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Laravel_Request_update_TestsStubs_ModelWithResourceController_ModelsModelWithResource'
+            responses:
+                200:
+                    description: 'Successful response.'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Laravel_Response_update_TestsStubs_ModelWithResourceController_ModelsModelWithResource'
+    /model:
+        get:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Resources'
+            operationId: LaravelGetAllModelWithResources
+            responses:
+                200:
+                    description: 'Successful response.'
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Laravel_Response_index_TestsStubs_ModelWithResourceController_ModelsModelWithResource'
+        post:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Resources'
+            operationId: LaravelCreateModelWithResource
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Laravel_Request_store_TestsStubs_ModelWithResourceController_ModelsModelWithResource'
+            responses:
+                200:
+                    description: 'Successful response.'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Laravel_Response_store_TestsStubs_ModelWithResourceController_ModelsModelWithResource'
+components:
+    schemas:
+        Laravel_Response_destroy_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
+            type: object
+            properties:
+                data:
+                    type: object
+                    description: ''
+                    properties:
+                        id:
+                            type: integer
+                        type:
+                            type: string
+                        attributes:
+                            type: object
+            required:
+                - data
+        Laravel_Response_index_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
+            type: object
+            properties:
+                data:
+                    type: object
+                    description: ''
+                    properties:
+                        id:
+                            type: integer
+                        type:
+                            type: string
+                        attributes:
+                            type: object
+            required:
+                - data
+        Laravel_Response_show_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
+            type: object
+            properties:
+                data:
+                    type: object
+                    description: ''
+                    properties:
+                        id:
+                            type: integer
+                        type:
+                            type: string
+                        attributes:
+                            type: object
+            required:
+                - data
+        Laravel_Request_store_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    description: ''
+                created_at:
+                    type: string
+                    description: ''
+                updated_at:
+                    type: string
+                    description: ''
+            required:
+                - id
+        Laravel_Response_store_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
+            type: object
+            properties:
+                data:
+                    type: object
+                    description: ''
+                    properties:
+                        id:
+                            type: integer
+                        type:
+                            type: string
+                        attributes:
+                            type: object
+            required:
+                - data
+        Laravel_Request_update_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    description: ''
+                created_at:
+                    type: string
+                    description: ''
+                updated_at:
+                    type: string
+                    description: ''
+            required:
+                - id
+        Laravel_Response_update_TestsStubs_ModelWithResourceController_ModelsModelWithResource:
+            type: object
+            properties:
+                data:
+                    type: object
+                    description: ''
+                    properties:
+                        id:
+                            type: integer
+                        type:
+                            type: string
+                        attributes:
+                            type: object
+            required:
+                - data

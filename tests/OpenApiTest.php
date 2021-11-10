@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\Yaml\Yaml;
 use Tests\Stubs\Http\Controllers\ModelController;
+use Tests\Stubs\Http\Controllers\ModelWithResourceController;
 use Tests\Stubs\Http\Controllers\ModelWithValidatorController;
 use Tests\Stubs\Http\Controllers\StandardController;
 
@@ -42,7 +43,21 @@ class OpenApiTest extends TestCase
         self::assertSame($expected, $schema);
     }
 
-    // it generates a valid openapi schema with response data based on the associated resource fields
+    /**
+     * @test
+     */
+    public function it_generates_a_valid_openapi_schema_with_response_data_based_on_the_associated_resource_fields()
+    {
+        Route::apiResource('model', ModelWithResourceController::class);
+
+        $expected = file_get_contents(__DIR__ . '/fixtures/model-with-resource-controller.yml');
+        $schema = Yaml::dump($this->generateSchema(), 10);
+
+        /* file_put_contents(__DIR__ . '/fixtures/model-with-resource-controller.yml', $schema); */
+
+        self::assertSame($expected, $schema);
+    }
+
     // it generates a valid openapi schema with request data for read requests based on the associated filters
 
     /**
