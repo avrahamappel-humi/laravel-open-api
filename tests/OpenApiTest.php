@@ -48,31 +48,37 @@ class OpenApiTest extends TestCase
      */
     public function it_generates_a_valid_openapi_schema_with_response_data_based_on_the_associated_resource_fields()
     {
+        OpenApi::determineResourceClassesBy(fn($model): ?string => $model->resource);
+
         Route::apiResource('model', ModelWithResourceController::class);
 
         $expected = file_get_contents(__DIR__ . '/fixtures/model-with-resource-controller.yml');
         $schema = Yaml::dump($this->generateSchema(), 10);
 
-        /* file_put_contents(__DIR__ . '/fixtures/model-with-resource-controller.yml', $schema); */
-
         self::assertSame($expected, $schema);
     }
-
-    // it generates a valid openapi schema with request data for read requests based on the associated filters
 
     /**
      * @test
      */
     public function it_generates_a_valid_openapi_schema_with_request_data_for_write_requests_based_on_the_associated_validators()
     {
-        OpenApi::determineValidationRulesBy(fn($model) => (new $model->validator())->rules());
+        OpenApi::determineValidationRulesBy(function ($model): ?array {
+            $validatorClass = $model->validator;
+
+            if (!$validatorClass) {
+                return null;
+            }
+
+            $validator = new $validatorClass();
+
+            return $validator?->rules();
+        });
 
         Route::apiResource('model', ModelWithValidatorController::class);
 
         $expected = file_get_contents(__DIR__ . '/fixtures/model-with-validator-controller.yml');
         $schema = Yaml::dump($this->generateSchema(), 10);
-
-        /* file_put_contents(__DIR__ . '/fixtures/model-with-validator-controller.yml', $schema); */
 
         self::assertSame($expected, $schema);
     }

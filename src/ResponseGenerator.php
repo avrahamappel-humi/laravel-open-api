@@ -9,12 +9,15 @@ use Asseco\OpenApi\Specification\Shared\Content\Content;
 use Asseco\OpenApi\Specification\Shared\Content\JsonSchema;
 use Asseco\OpenApi\Specification\Shared\ReferencedSchema;
 use Asseco\OpenApi\Specification\Shared\StandardSchema;
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 use stdClass;
 
 class ResponseGenerator
 {
+    public static Closure $getResourceClass;
+
     protected TagExtractor $tagExtractor;
     protected StandardSchema $schema;
     private string $schemaName;
@@ -119,8 +122,7 @@ class ResponseGenerator
 
     protected function extractResponseData(Model $model, array $columns, array $append = []): array
     {
-        // If model has associated resource, pass it through the resource
-        if ($resource = $this->getModelResource($model)) {
+        if ($resource = $this->getResourceClass($model)) {
             return $this->getColumnsFromResource($resource, $columns);
         }
 
@@ -139,15 +141,13 @@ class ResponseGenerator
         return $columns;
     }
 
-    protected function getModelResource(Model $model): ?string
+    protected function getResourceClass(Model $model): ?string
     {
-        if (!property_exists($model, 'resource')) {
+        if (!isset(static::$getResourceClass)) {
             return null;
         }
 
-        $resourceGetter = fn() => $this->resource;
-
-        return $resourceGetter->call($model);
+        return call_user_func(static::$getResourceClass, $model);
     }
 
     protected function getColumnsFromResource(string $resourceClass, array $columns)

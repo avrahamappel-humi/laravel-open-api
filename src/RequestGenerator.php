@@ -95,8 +95,8 @@ class RequestGenerator
 
     private function extractRequestData(Model $model, array $columns, array $except, array $append = []): array
     {
-        if (isset(self::$getValidationRules)) {
-            return $this->getRequestDataFromValidator($model);
+        if ($rules = $this->getValidationRules($model)) {
+            return $this->getRequestDataFromValidator($rules);
         }
 
         $fillable = $model->getFillable();
@@ -125,11 +125,18 @@ class RequestGenerator
         return $columns;
     }
 
-    private function getRequestDataFromValidator(Model $model): array
+    private function getValidationRules(Model $model): ?array
     {
-        $validationRules = call_user_func(self::$getValidationRules, $model);
+        if (!isset(self::$getValidationRules)) {
+            return null;
+        }
 
-        return collect($validationRules)->reduce(function ($columns, $rules, $attribute) {
+        return call_user_func(self::$getValidationRules, $model);
+    }
+
+    private function getRequestDataFromValidator(array $rules): array
+    {
+        return collect($rules)->reduce(function ($columns, $rules, $attribute) {
             if (is_string($rules)) {
                 $rules = explode('|', $rules);
             }

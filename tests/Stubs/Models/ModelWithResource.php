@@ -9,5 +9,5 @@ class ModelWithResource extends Model
 {
     protected $table = 'models';
 
-    protected $resource = ModelResource::class;
+    public $resource = ModelResource::class;
 }
