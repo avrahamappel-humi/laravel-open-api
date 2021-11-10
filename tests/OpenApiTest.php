@@ -48,10 +48,10 @@ class OpenApiTest extends TestCase
     {
         Route::apiResource('model', ModelWithResourceController::class);
 
-        $expected = Yaml::parse(file_get_contents(__DIR__ . '/fixtures/model-with-resource-controller.yml'));
+        $expected = file_get_contents(__DIR__ . '/fixtures/model-with-resource-controller.yml');
+        $schema = Yaml::dump($this->generateSchema(), 10);
 
-        $schema = $this->generateSchema();
-        /* $expected = file_put_contents(__DIR__ . '/fixtures/model-with-resource-controller.yml', Yaml::dump($schema)); */
+        /* file_put_contents(__DIR__ . '/fixtures/model-with-resource-controller.yml', $schema); */
 
         self::assertSame($expected, $schema);
     }
