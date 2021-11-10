@@ -8,10 +8,13 @@ use Asseco\OpenApi\Specification\Shared\Content\Content;
 use Asseco\OpenApi\Specification\Shared\Content\JsonSchema;
 use Asseco\OpenApi\Specification\Shared\ReferencedSchema;
 use Asseco\OpenApi\Specification\Shared\StandardSchema;
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 
 class RequestGenerator
 {
+    public static Closure $getValidationRules;
+
     private TagExtractor $tagExtractor;
     private string $schemaName;
 
@@ -92,6 +95,10 @@ class RequestGenerator
 
     private function extractRequestData(Model $model, array $columns, array $except, array $append = []): array
     {
+        if (isset(self::$getValidationRules)) {
+            return $this->getRequestDataFromValidator($model);
+        }
+
         $fillable = $model->getFillable();
         $guarded = $model->getGuarded();
 
@@ -113,6 +120,79 @@ class RequestGenerator
 
         foreach ($append as $item) {
             $columns[] = $item;
+        }
+
+        return $columns;
+    }
+
+    private function getRequestDataFromValidator(Model $model): array
+    {
+        $validationRules = call_user_func(self::$getValidationRules, $model);
+
+        return collect($validationRules)->reduce(function ($columns, $rules, $attribute) {
+            if (is_string($rules)) {
+                $rules = explode('|', $rules);
+            }
+
+            $type = $this->getTypeFromRules($rules);
+            $required = in_array('required', $rules);
+
+            return $this->setColumnFromValidation(explode('.', $attribute), $type, $required, $columns);
+        }, []);
+    }
+
+    private function getTypeFromRules(array $rules): string
+    {
+        foreach ($rules as $rule) {
+            if ($type = $this->getTypeFromRule($rule)) {
+                return $type;
+            }
+        }
+
+        return 'string';
+    }
+
+    private function getTypeFromRule(string $rule): ?string
+    {
+        switch ($rule) {
+            case 'array':
+                return 'array';
+            case 'boolean':
+                return 'boolean';
+            case 'integer':
+                return 'integer';
+            case 'numeric':
+                return 'number';
+            case 'string':
+            case 'date':
+                return 'string';
+            default:
+                return null;
+        }
+    }
+
+    private function setColumnFromValidation(array $path, string $type, bool $required, array $columns): array
+    {
+        $name = array_shift($path);
+        $key = count($columns);
+
+        foreach ($columns as $i => $column) {
+            if ($column->name === $name) {
+                $key = $i;
+                break;
+            }
+        }
+
+        $columns[$key] = $columns[$key] ?? new Column($name, $type, $required);
+
+        if (count($path) > 0) {
+            $columns[$key]->type = $path[0] === '*' ? 'array' : 'object';
+            $columns[$key]->children = $this->setColumnFromValidation(
+                $path,
+                $type,
+                $required,
+                $columns[$key]->children ?? []
+            );
         }
 
         return $columns;
