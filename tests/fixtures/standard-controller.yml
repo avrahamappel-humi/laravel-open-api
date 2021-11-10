@@ -4,18 +4,19 @@ info:
     description: 'Generated with this [awesome package](https://github.com/asseco-voice/laravel-open-api)!'
     version: 0.0.1
 servers:
-    - { url: 'http://localhost', description: 'Default server' }
+    -
+        url: 'http://localhost'
+        description: 'Default server'
 paths:
     /standard:
-        {
-            get:
-                {
-                    summary: '',
-                    description: '',
-                    tags: [Standards],
-                    operationId: LaravelStandardStandard,
-                    responses: { 200: { description: 'Successful response.' } },
-                },
-        }
+        get:
+            summary: ''
+            description: ''
+            tags:
+                - Standards
+            operationId: LaravelStandardStandard
+            responses:
+                200:
+                    description: 'Successful response.'
 components:
-    schemas: {}
+    schemas: {  }

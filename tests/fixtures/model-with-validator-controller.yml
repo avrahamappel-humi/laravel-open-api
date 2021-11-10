@@ -1,0 +1,145 @@
+openapi: 3.0.0
+info:
+    title: 'Laravel API'
+    description: 'Generated with this [awesome package](https://github.com/asseco-voice/laravel-open-api)!'
+    version: 0.0.1
+servers:
+    -
+        url: 'http://localhost'
+        description: 'Default server'
+paths:
+    '/model/{model}':
+        delete:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Validators'
+            operationId: LaravelDeleteModelWithValidator
+            parameters:
+                -
+                    in: path
+                    name: model
+                    schema:
+                        type: integer
+                    required: true
+                    description: 'Path parameter'
+            responses:
+                200:
+                    description: 'Successful response.'
+        get:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Validators'
+            operationId: LaravelGetModelWithValidator
+            parameters:
+                -
+                    in: path
+                    name: model
+                    schema:
+                        type: integer
+                    required: true
+                    description: 'Path parameter'
+            responses:
+                200:
+                    description: 'Successful response.'
+        put:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Validators'
+            operationId: LaravelPutModelWithValidator
+            parameters:
+                -
+                    in: path
+                    name: model
+                    schema:
+                        type: integer
+                    required: true
+                    description: 'Path parameter'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Laravel_Request_update_TestsStubs_ModelWithValidatorController_ModelsModelWithValidator'
+            responses:
+                200:
+                    description: 'Successful response.'
+        patch:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Validators'
+            operationId: LaravelPatchModelWithValidator
+            parameters:
+                -
+                    in: path
+                    name: model
+                    schema:
+                        type: integer
+                    required: true
+                    description: 'Path parameter'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Laravel_Request_update_TestsStubs_ModelWithValidatorController_ModelsModelWithValidator'
+            responses:
+                200:
+                    description: 'Successful response.'
+    /model:
+        get:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Validators'
+            operationId: LaravelGetAllModelWithValidators
+            responses:
+                200:
+                    description: 'Successful response.'
+        post:
+            summary: ''
+            description: ''
+            tags:
+                - 'Model With Validators'
+            operationId: LaravelCreateModelWithValidator
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Laravel_Request_store_TestsStubs_ModelWithValidatorController_ModelsModelWithValidator'
+            responses:
+                200:
+                    description: 'Successful response.'
+components:
+    schemas:
+        Laravel_Request_store_TestsStubs_ModelWithValidatorController_ModelsModelWithValidator:
+            type: object
+            properties:
+                data:
+                    type: object
+                    description: ''
+                    properties:
+                        id:
+                            type: integer
+                        type:
+                            type: string
+                        attributes:
+                            type: object
+            required:
+                - data
+        Laravel_Request_update_TestsStubs_ModelWithValidatorController_ModelsModelWithValidator:
+            type: object
+            properties:
+                data:
+                    type: object
+                    description: ''
+                    properties:
+                        id:
+                            type: integer
+                        type:
+                            type: string
+                        attributes:
+                            type: object
+            required:
+                - data
