@@ -162,7 +162,7 @@ class SchemaGenerator
                 $appName
             );
 
-            $requestGenerator = new RequestGenerator($tagExtractor, $appName . '_Request_' . $schemaName);
+            $requestGenerator = new RequestGenerator($tagExtractor, $appName . '_Request_' . $schemaName, $route);
             $requestSchema = $requestGenerator->createSchema($namespace, $model);
 
             $requestBody = null;

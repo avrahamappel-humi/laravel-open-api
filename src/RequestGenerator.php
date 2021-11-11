@@ -17,11 +17,13 @@ class RequestGenerator
 
     private TagExtractor $tagExtractor;
     private string $schemaName;
+    private RouteWrapper $route;
 
-    public function __construct(TagExtractor $tagExtractor, string $schemaName)
+    public function __construct(TagExtractor $tagExtractor, string $schemaName, RouteWrapper $route)
     {
         $this->tagExtractor = $tagExtractor;
         $this->schemaName = $schemaName;
+        $this->route = $route;
     }
 
     public function createSchema(string $namespace, ?Model $model): ?StandardSchema
@@ -131,7 +133,7 @@ class RequestGenerator
             return null;
         }
 
-        return call_user_func(self::$getValidationRules, $model);
+        return call_user_func(self::$getValidationRules, $model, $this->route);
     }
 
     private function getRequestDataFromValidator(array $rules): array

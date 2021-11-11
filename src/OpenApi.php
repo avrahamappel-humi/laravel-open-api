@@ -9,8 +9,7 @@ class OpenApi
     /**
      * Configure how you want your validation rules to be discovered.
      *
-     * $fn should be a callback that takes one parameter, an instance of
-     * \Illuminate\Database\Eloquent\Model, and returns an array of validation rules.
+     * @param callable(\Illuminate\Database\Eloquent\Model, \Asseco\OpenApi\RouteWrapper): ?array $fn
      */
     public static function determineValidationRulesBy(callable $fn): void
     {
@@ -20,9 +19,7 @@ class OpenApi
     /**
      * Configure how you want your resource classes to be discovered.
      *
-     * $fn should be a callback that takes a single parameter, an instance of
-     * \Illuminate\Database\Eloquent\Model, and returns a string class name which extends
-     * \Illuminate\Http\Resources\Json\JsonResource.
+     * @param callable(\Illuminate\Database\Eloquent\Model): ?class-string<\Illuminate\Http\Resources\Json\JsonResource> $fn
      */
     public static function determineResourceClassesBy(callable $fn): void
     {
